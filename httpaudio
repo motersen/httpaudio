@@ -1,0 +1,23 @@
+#!/bin/sh
+
+## Transcode pulseaudio output to mp3 stream via http server
+
+cleanup () {
+	## close ports & remove virtual sink
+	firewall-cmd --zone=home --remove-port=8888/tcp --remove-port=8888/udp
+	pactl unload-module module-null-sink
+}
+
+trap cleanup EXIT
+
+# create virtual audio output
+pactl load-module module-null-sink sink_name=HTTPStream
+pactl set-default-sink HTTPStream
+
+firewall-cmd --zone=home --add-port=8888/tcp --add-port=8888/udp
+
+## To grab audio from an actual sink:
+## pulse://$(pactl list | grep "Monitor Source" | sed 's/.*\s//')
+
+cvlc pulse://HTTPStream.monitor --no-video \
+	 --sout '#transcode{acodec=LAME,ab=128,channels=2}:standard{mux=mpeg1,access=http,dst=0.0.0.0:8888}'
