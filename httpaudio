@@ -20,4 +20,4 @@ firewall-cmd --zone=home --add-port=8888/tcp --add-port=8888/udp
 ## pulse://$(pactl list | grep "Monitor Source" | sed 's/.*\s//')
 
 cvlc pulse://HTTPStream.monitor --no-video \
-	 --sout '#transcode{acodec=LAME,ab=128,channels=2}:standard{mux=mpeg1,access=http,dst=0.0.0.0:8888}'
+	 --sout '#transcode{acodec=LAME,ab=128,channels=2}:standard{mux=dummy,access=http,dst=0.0.0.0:8888}'
