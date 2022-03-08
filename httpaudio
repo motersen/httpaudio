@@ -22,7 +22,8 @@ start_stream () {
 	# To grab audio from an actual sink:
 	# pulse://$(pactl list | grep "Monitor Source" | sed 's/.*\s//')
 	cvlc pulse://HTTPStream.monitor --no-video \
-		 --sout '#transcode{acodec=LAME,ab=128,channels=2}:standard{mux=dummy,access=http,dst=0.0.0.0:8888}' &
+		 --sout '#transcode{acodec=LAME,ab=192,channels=2}:std{mux=dummy,access=http}' \
+		 --http-host 0.0.0.0 --http-port 8888 &
 
 	vlc_pid=$!
 	wait $vlc_pid
